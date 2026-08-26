@@ -42,3 +42,10 @@ p {
     background: #333;
     color: white;
 }
+
+.lab-nav .active {
+    padding: 8px 14px;
+    border-radius: 5px;
+    background: #333;
+    color: white;
+}
