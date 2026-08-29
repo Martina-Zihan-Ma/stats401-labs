@@ -243,10 +243,10 @@ d3.csv("../data/cities_multivariate.csv", d => ({
              .style("opacity", 1)
               .html(`
             <strong>${d.city}</strong><br>
-            Population: ${d.population}million<br>
+            Population: ${d.population} million<br>
             Temperature: ${d.temp_c}°C<br>
             Development level: ${d.development_level}<br>
-            region: ${d.region}
+            Region: ${d.region}
         `);
 
     })
