@@ -1,44 +1,72 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <title>Lab 2</title>
+    <title>Lab 2 - Multivariate Visualization</title>
 
-    <link rel="stylesheet" href="../css/style.css">
-
+    <link rel="stylesheet"
+          href="style.css">
 </head>
 
 <body>
 
-    <nav class="lab-nav">
+  <header>
+     <h1>STATS 401</h1>
+     <p>Data Acquisition and Visualization</p>
+  </header>
 
-     <a href="../lab1/index.html">Lab 1</a>
-     <span class="active">Lab 2</span>
-     <a href="../lab3/index.html">Lab 3</a>
-     <a href="../lab4/index.html">Lab 4</a>
-     <a href="../lab5/index.html">Lab 5</a>
-     <a href="../lab6/index.html">Lab 6</a>
-     <a href="../lab7/index.html">Lab 7</a>
-     <a href="../lab8/index.html">Lab 8</a>
-     <a href="../lab9/index.html">Lab 9</a>
-     <a href="../lab10/index.html">Lab 10</a>
+  <nav class="lab-nav">
+    <a href="../lab1/index.html">Lab 1</a>
+    <a href="../lab2/index.html">Lab 2</a>
+    <a href="../lab3/index.html">Lab 3</a>
+    <a href="../lab4/index.html">Lab 4</a>
+    <a href="../lab5/index.html">Lab 5</a>
+    <a href="../lab6/index.html">Lab 6</a>
+    <a href="../lab7/index.html">Lab 7</a>
+    <a href="../lab8/index.html">Lab 8</a>
+    <a href="../lab9/index.html">Lab 9</a>
+    <a href="../lab10/index.html">Lab 10</a>
+  </nav>
 
-    </nav>
-
-    <h1>Lab 2</h1>
+  <main>
+    <h2>Lab 2: Multivariate Visualization with D3</h2>
 
     <p>
-        Lab 2 will be added here.
+        This visualization explores the relationship among
+        cities, population, temperature, region and development level.
     </p>
 
-    <a href="../index.html">
+    <div id="chart"></div>
+    <div id="tooltip" class="tooltip"></div>
+
+    <h2>
+        Design Justification
+    </h2>
+
+    <p>
+      In this visualization, I mapped <strong>Region</strong> to four separate quadrants (North, East, West, and South) so that cities from the same region can be easily grouped and compared. <br>
+     <strong>Development level</strong> is mapped to vertical position, with High placed above Medium and Low, making its ordinal structure clear. Therefore the position clearly communicates the natural order of this ordinal variable.<br>
+     <strong>Population</strong> is represented by circle size because it is ration data that can be compared through its size. Cities with larger populations appear as larger circles. <br>
+     <strong>Temperature</strong> is mapped to a diverging color scale centered at 20°C. Temperatures below 20°C are shown in blue, while temperatures above 20°C are shown in red, with stronger colors indicating greater distance from 20°C. It can show the difference in temperature clearly.
+     </p>
+     
+     <p>
+     These mappings allow viewers to compare cities across multiple dimensions at the same time and notice patterns among region, development level, population, and temperature.
+     Combining color with regional grouping makes it easier to notice whether cities within the same region tend to have similar temperature patterns and how temperatures differ across regions.
+     By comparing the positions and sizes of the circles, people can easily gain the insights into the relationships among population, region and development level.
+
+    </p>
+
+    <a href="../index.html" class="back-home">
         Back to home
     </a>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="main.js"></script>
 
 </body>
-
 </html>
