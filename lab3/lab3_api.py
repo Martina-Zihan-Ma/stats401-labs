@@ -9,7 +9,7 @@ headers = {
     "User-Agent": "STATS401-Class-Exercise/1.0"
 }
 
-for offset in range(1,6):
+for offset in range(1, 1001, 200):
 
     url = "https://earthquake.usgs.gov/fdsnws/event/1/query"
 
