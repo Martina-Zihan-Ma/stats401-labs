@@ -53,13 +53,6 @@ d3.csv("../data/lab3_data.csv")
                         bValue = +bValue;
                     }
 
-                    if (column === "time") {
-
-                        aValue = new Date(aValue);
-                        bValue = new Date(bValue);
-                    }
-
-
                     return ascending
                         ? d3.ascending(aValue, bValue)
                         : d3.descending(aValue, bValue);
