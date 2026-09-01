@@ -1,45 +1,83 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <title>Lab 3</title>
+    <title>Lab 3 </title>
 
-    <link rel="stylesheet" href="../css/style.css">
-
+    <link rel="stylesheet"
+          href="style.css">
 </head>
 
 <body>
 
-    <nav class="lab-nav">
+  <header>
+     <h1>STATS 401</h1>
+     <p>Data Acquisition and Visualization</p>
+  </header>
 
-     <a href="../lab1/index.html">Lab 1</a>
-     <a href="../lab2/index.html">Lab 2</a>
-     <span class="active">Lab 3</span>
-     <a href="../lab4/index.html">Lab 4</a>
-     <a href="../lab5/index.html">Lab 5</a>
-     <a href="../lab6/index.html">Lab 6</a>
-     <a href="../lab7/index.html">Lab 7</a>
-     <a href="../lab8/index.html">Lab 8</a>
-     <a href="../lab9/index.html">Lab 9</a>
-     <a href="../lab10/index.html">Lab 10</a>
+  <nav class="lab-nav">
+    <a href="../lab1/index.html">Lab 1</a>
+    <a href="../lab2/index.html">Lab 2</a>
+    <span class="active">Lab 3</span>
+    <a href="../lab4/index.html">Lab 4</a>
+    <a href="../lab5/index.html">Lab 5</a>
+    <a href="../lab6/index.html">Lab 6</a>
+    <a href="../lab7/index.html">Lab 7</a>
+    <a href="../lab8/index.html">Lab 8</a>
+    <a href="../lab9/index.html">Lab 9</a>
+    <a href="../lab10/index.html">Lab 10</a>
+  </nav>
 
-    </nav>
+  <main>
+    <h2>Lab 3: Web Data Acquisition</h2>
 
+  <p>
+    The table below contains data acquired
+    using my Python script.
+  </p>
 
-    <h1>Lab 3</h1>
+  <table id="data-table">
+    <caption>
+    Global Earthquakes of Magnitude 2.5 and Above
+    </caption>
+    <thead></thead>
+    <tbody></tbody>
+  </table>
 
-    <p>
-        Lab 3 will be added here.
-    </p>
+    <div id="pagination">
+      <button id="prev-btn">Previous</button>
+      <span id="page-info"></span>
+      <button id="next-btn">Next</button>
+      <button id="reset-btn">Reset</button>
+    </div>
+     
+    <section class="dataset-info">
+      <h3>Dataset Information</h3>
 
-    <a href="../index.html">
+      <p><strong>Dataset:</strong> Global Earthquakes of Magnitude 2.5 and Above</p>
+      <p><strong>Source:</strong> 
+        <a
+        href="https://earthquake.usgs.gov/fdsnws/event/1/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >
+        U.S. Geological Survey (USGS) Earthquake Catalog
+    </a></p>
+      <p><strong>Method:</strong> REST API using Python requests</p>
+      <p><strong>Records collected:</strong> 1,000</p>
+    </section>
+
+    <a href="../index.html" class="back-home">
         Back to home
     </a>
 
-</body>
+  </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="main.js"></script>
+
+</body>
 </html>
