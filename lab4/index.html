@@ -8,7 +8,7 @@
 
     <title>Lab 4</title>
 
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -29,16 +29,67 @@
 
     </nav>
 
-    <h1>Lab 4</h1>
+    <h1>Lab 4: Cleaning Web Data for Visualization</h1>
 
     <p>
-        Lab 4 will be added here.
+         This visualization explores the relationship between tweet sentiment and engagement in a sample of #MeToo tweets dataset.
     </p>
 
-    <a href="../index.html">
+    <div id="chart"></div>
+    <div id="tooltip"></div>
+
+    <section class="confidence-section">
+
+      <h2>Low-Confidence Predictions</h2>
+
+       <p>
+        These tweets had some of the lowest sentiment confidence scores,
+        showing cases where the RoBERTa model was relatively uncertain.
+       </p>
+
+       <div id="confidence-cards"></div>
+
+    </section>
+
+    <section class="analysis">
+
+            <h2>
+                Analysis
+            </h2>
+
+            <p>
+                This visualization uses a random sample of 2,000 tweets
+                from the #MeToo Tweets Dataset, which originally contains
+                28,629 tweets. I inspected the raw data for missing values,
+                duplicate records, invalid dates, incorrect numeric values,
+                and inconsistent fields. The dataset contained no duplicate
+                tweet IDs, invalid dates, or negative engagement values.
+                Missing source values were labeled as "Unknown," while
+                missing emoji names were retained because most tweets did
+                not contain emojis.
+            </p>
+
+            <p>
+                Sentiment was estimated using the CardiffNLP Twitter
+                RoBERTa sentiment model. User mentions and URLs were lightly
+                normalized before prediction, and the resulting sentiment
+                labels and scores should be interpreted as model-generated
+                estimates rather than ground-truth labels. In the
+                visualization, horizontal position represents sentiment
+                score, vertical position represents retweet count, circle
+                size represents favorites, and color represents predicted
+                sentiment. Negative tweets were the largest group in this
+                sample, while positive tweets were less common.
+            </p>
+
+    </section>
+
+    <a href="../index.html" class="back-home">
         Back to home
     </a>
-
+    
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="main.js"></script>
 </body>
 
 </html>
