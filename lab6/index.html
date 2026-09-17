@@ -8,11 +8,16 @@
 
     <title>Lab 6</title>
 
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
+
+    <header>
+      <h1>STATS 401</h1>
+      <p>Data Acquisition and Visualization</p>
+    </header>
 
     <nav class="lab-nav">
 
@@ -27,16 +32,45 @@
      <a href="../lab9/index.html">Lab 9</a>
      <a href="../lab10/index.html">Lab 10</a>
 
-
     </nav>
 
-    <h1>Lab 6</h1>
+    <h1>Lab 6: Hierarchical Data Visualization: Trees and Treemaps</h1>
 
     <p>
-        Lab 6 will be added here.
+    This lab explores two approaches to hierarchical data visualization using GDP data: a node-link tree and a treemap.
     </p>
 
-    <a href="../index.html">
+    <div id="tree"></div>
+    <div id="treemap"></div>
+    <div
+    id="tooltip"
+    class="tooltip">
+    </div>
+
+    <section class="design-description">
+
+    <h2>Design Description</h2>
+
+    <p>
+        I used two different hierarchical visualizations to show the same GDP dataset. 
+        In the node-link tree, position and links are used to show the parent-child relationships between the world, continents, areas, and countries. 
+        GDP is encoded using node size because size provides an intuitive way to compare quantitative values, while GDP status is represented using color because it is categorical data. 
+        The node-link tree makes the hierarchical structure and depth especially clear.
+    </p>
+
+    <p>
+        In the treemap, GDP is encoded using rectangle area, allowing larger economies to occupy more visual space. 
+        Color is again used for GDP status so that the encoding remains consistent across both visualizations. 
+        Spatial containment and borders are used to show the continent and area groupings. 
+        Compared with the node-link tree, the treemap uses space more efficiently and makes GDP magnitude easier to compare, while the node-link tree makes the hierarchical relationships easier to follow.
+    </p>
+
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="lab6.js"></script>
+
+    <a href="../index.html" class="back-home">
         Back to home
     </a>
 
