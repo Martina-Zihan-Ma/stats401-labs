@@ -48,24 +48,26 @@
     </div>
 
     <section class="design-description">
+        
+<h2>Design Description</h2>
 
-    <h2>Design Description</h2>
+<p>
+    I used two treemap visualizations to represent the same hierarchical GDP dataset. 
+    In both visualizations, rectangle area encodes GDP because area provides a direct way to compare quantitative magnitude. 
+    GDP status is represented using color because it is categorical data, while spatial containment and borders show the hierarchy from continent to area to country. 
+    I kept the same visual encodings in both treemaps so that the main difference between them is the segmentation strategy.
+</p>
 
-    <p>
-        I used two different hierarchical visualizations to show the same GDP dataset. 
-        In the node-link tree, position and links are used to show the parent-child relationships between the world, continents, areas, and countries. 
-        GDP is encoded using node size because size provides an intuitive way to compare quantitative values, while GDP status is represented using color because it is categorical data. 
-        The node-link tree makes the hierarchical structure and depth especially clear.
-    </p>
+<p>
+    The Squarify layout creates more balanced rectangular shapes, which makes country GDP values easier to compare and leaves more space for labels. 
+    In contrast, the Dice layout divides the hierarchy into long vertical regions. 
+    This makes the spatial subdivision more visually distinct, but large economies such as the United States can occupy a very large portion of the layout and compress smaller countries into narrow regions. 
+    As a result, some labels cannot be displayed and must be accessed through the tooltip. 
+    This shows the trade-off between readability of individual values and the visual structure created by different treemap segmentation methods.
+</p>
 
-    <p>
-        In the treemap, GDP is encoded using rectangle area, allowing larger economies to occupy more visual space. 
-        Color is again used for GDP status so that the encoding remains consistent across both visualizations. 
-        Spatial containment and borders are used to show the continent and area groupings. 
-        Compared with the node-link tree, the treemap uses space more efficiently and makes GDP magnitude easier to compare, while the node-link tree makes the hierarchical relationships easier to follow.
-    </p>
+</section>
 
-    </section>
 
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <script src="lab6.js"></script>
