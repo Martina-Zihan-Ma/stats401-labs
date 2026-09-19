@@ -8,7 +8,7 @@
 
     <title>Lab 7</title>
 
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -40,7 +40,102 @@
         Lab 7 will be added here.
     </p>
 
-    <a href="../index.html">
+
+    <div class="controls">
+    <button id="play">Play</button>
+    <button id="pause">Pause</button>
+    <button id="reset">Reset</button>
+
+    <span>Day 1</span>
+
+    <input
+        type="range"
+        id="time-slider"
+        min="1"
+        max="60"
+        step="1"
+        value="1"
+    >
+
+    <span>Day 60</span>
+</div>
+
+<div id="current-date"></div>
+
+<div id="chart"></div>
+<div id="day-summary">
+    <h3>Day Summary</h3>
+    <p id="summary-day"></p>
+    <p id="summary-active-companies"></p>
+    <p id="summary-active-links"></p>
+    <p id="summary-total-value"></p>
+    <p id="summary-total-transactions"></p>
+</div>
+
+<div id="tooltip"></div>
+
+<section id="questions">
+    <h2>Temporal Network Analysis</h2>
+
+    <div class="question">
+        <h3>1. How does overall network connectivity change across the 60 days?</h3>
+        <p>
+            Based on the visual trend, the overall network becomes more connected over time.
+            In the earlier days, there are relatively few links and many companies remain isolated.
+            As the animation progresses, more links appear between companies, so the network gradually
+            becomes denser and more interconnected toward the end of the 60-day period.
+        </p>
+    </div>
+
+    <div class="question">
+        <h3>2. Which companies become more central or commercially active over time?</h3>
+        <p>
+            Harbor Shipping appears to become increasingly central over time.
+            In the later part of the animation, it is connected to more companies and has one of the
+            largest numbers of links. Visually, it seems to play a more important role in connecting
+            different parts of the network as time progresses.
+        </p>
+    </div>
+
+    <div class="question">
+        <h3>3. Are there periods when the network consists of relatively separate clusters?</h3>
+        <p>
+            Yes. This is especially noticeable in the early period. For example, on Day 1,
+            there are only three links, so most companies are isolated and the network is highly fragmented.
+            Another clear example appears around Day 49, when the network seems to form two separate groups,
+            with Sender Retail and Ion Systems acting as the centers of two different clusters,
+            while several other companies remain isolated.
+        </p>
+    </div>
+
+    <div class="question">
+        <h3>4. Which commercial relationships appear, disappear, or become stronger over time?</h3>
+        <p>
+            Most commercial relationships appear to be relatively balanced, and there is no single
+            relationship that visually becomes much stronger than all the others. Links appear and disappear
+            throughout the animation, but their overall strengths remain fairly similar. One repeated pattern
+            I noticed is that Ion Systems frequently has a purple link, which represents a service-type
+            transaction, suggesting that service relationships involving Ion Systems occur relatively
+            consistently over time.
+        </p>
+    </div>
+
+    <div class="question">
+        <h3>5. Does the network become more or less cross-regional over time?</h3>
+        <p>
+            There does not appear to be a strong visual trend toward either more or less cross-regional
+            interaction over time. Region is encoded using the node border color, but this visual channel
+            is less prominent than node fill color or link color, so changes in cross-regional relationships
+            are not immediately obvious. From the visualization alone, the level of cross-regional
+            connectivity seems to fluctuate rather than showing a clear increasing or decreasing pattern.
+        </p>
+    </div>
+</section>
+
+   <script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="lab7.js"></script>
+
+    <a href="../index.html" class="back-home">
         Back to home
     </a>
 
