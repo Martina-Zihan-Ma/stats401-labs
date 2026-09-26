@@ -13,9 +13,10 @@ from sklearn.neighbors import NearestNeighbors
 input_path = "data/bulletin_passages.csv"
 embedding_output_path = "data/lab8_embedding_map.csv"
 matrix_output_path = "data/lab8_topic_section_matrix.csv"
+summary_path = "data/lab8_corpus_summary.csv"
 
 df = pd.read_csv(input_path)
-raw_count = len(df)
+raw_count = int(pd.read_csv(summary_path).loc[0, "raw_passages"]) if os.path.exists(summary_path) else len(df)
 
 df = df.dropna(subset=["text"]).drop_duplicates(subset=["text"]).copy()
 df["section"] = df["section"].fillna("Unspecified Section")

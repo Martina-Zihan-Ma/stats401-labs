@@ -25,6 +25,13 @@ class SemanticOutputTests(unittest.TestCase):
         self.assertTrue(((corpus["chapter"] == "Part 5: Financial Information") & (corpus["section"] == "Estimated Expenses")).any())
         self.assertTrue(((corpus["chapter"] == "Part 6: Academic Procedures and Information") & (corpus["section"] == "Grading and Grade Requirements") & (corpus["subsection"].str.contains("Credit/No Credit", na=False))).any())
 
+    def test_extractor_joins_wrapped_formal_section_titles_and_tracks_raw_count(self):
+        corpus = self.extracted_corpus
+        title = "Academic Warning, Probation, and Suspension for Students in the Classes of 2022-2024"
+        self.assertNotIn("of 2022-2024", set(corpus["section"]))
+        self.assertTrue(((corpus["chapter"] == "Part 6: Academic Procedures and Information") & (corpus["section"] == title)).any())
+        self.assertGreater(corpus.attrs["raw_count"], len(corpus))
+
     def test_extractor_keeps_course_descriptions_as_a_formal_section(self):
         corpus = self.extracted_corpus
         courses = corpus[corpus["section"] == "Course Descriptions"]

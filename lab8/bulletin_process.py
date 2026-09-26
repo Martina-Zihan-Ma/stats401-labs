@@ -29,6 +29,10 @@ def is_prerequisite(text: str) -> bool:
     return text.lower().startswith(("prerequisite:", "prerequisites:", "prerequisite(s):", "corequisite:"))
 
 
+def is_heading_continuation(text: str) -> bool:
+    return bool(re.match(r"^(?:[a-z]|\d{4}\s+(?:and|to)\b)", text))
+
+
 def is_table_fragment(text: str, fonts: set[str]) -> bool:
     return (
         "Palatino" in " ".join(fonts)
@@ -74,6 +78,9 @@ def extract_bulletin(pdf_path: str | Path) -> pd.DataFrame:
                     continue
                 if not started:
                     continue
+                if bold and size >= 13 and is_heading_continuation(text):
+                    section = f"{section} {text}"
+                    continue
                 if bold and size >= 13:
                     save()
                     section, subsection = text, ""
@@ -95,6 +102,7 @@ def extract_bulletin(pdf_path: str | Path) -> pd.DataFrame:
                     save()
             save()
 
+    raw_count = len(records)
     df = pd.DataFrame(records)
     if df.empty:
         return pd.DataFrame(columns=["passage_id", "chapter", "section", "subsection", "page", "text", "text_clean", "word_count"])
@@ -103,7 +111,9 @@ def extract_bulletin(pdf_path: str | Path) -> pd.DataFrame:
     df = df.drop_duplicates(subset=["text_clean"])
     df = df[df["word_count"] >= 8].reset_index(drop=True)
     df.insert(0, "passage_id", [f"p{i:04d}" for i in range(1, len(df) + 1)])
-    return df[["passage_id", "chapter", "section", "subsection", "page", "text", "text_clean", "word_count"]]
+    df = df[["passage_id", "chapter", "section", "subsection", "page", "text", "text_clean", "word_count"]]
+    df.attrs["raw_count"] = raw_count
+    return df
 
 
 def main():
@@ -113,7 +123,15 @@ def main():
     args = parser.parse_args()
     df = extract_bulletin(args.pdf)
     df.to_csv(args.output, index=False)
-    print(f"Raw/cleaned passages: {len(df)}")
+    summary = pd.DataFrame([{
+        "raw_passages": df.attrs["raw_count"],
+        "cleaned_passages": len(df),
+        "average_word_count": round(df.word_count.mean(), 2),
+        "formal_sections": df.section.nunique(),
+    }])
+    summary.to_csv(Path(args.output).with_name("lab8_corpus_summary.csv"), index=False)
+    print(f"Raw passages: {df.attrs['raw_count']}")
+    print(f"Cleaned passages: {len(df)}")
     print(f"Average passage length: {df.word_count.mean():.2f}")
     print(f"Formal sections: {df.section.nunique()}")
 
