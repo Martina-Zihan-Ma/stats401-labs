@@ -1,511 +1,122 @@
+from __future__ import annotations
+
+import argparse
 import re
+from pathlib import Path
+
 import pandas as pd
 import pdfplumber
 
-pdf_path = "data/lab8_bulletin.pdf"
-output_path = "data/bulletin_passages.csv"
 
-records = []
-
-current_chapter = ""
-current_section = ""
-current_subsection = ""
-content_started = False
-course_catalog_mode = False
-in_course_table = False
+def clean_text(text: str) -> str:
+    return re.sub(r"\s+", " ", text).strip()
 
 
-def clean_line(line):
-    return re.sub(r"\s+", " ", line).strip()
+def is_page_number(text: str) -> bool:
+    return bool(re.fullmatch(r"\d+", text))
 
 
-def is_chapter(line):
-    return bool(
-        re.match(
-            r"^Part\s+\d+\s*:",
-            line,
-            re.IGNORECASE
-        )
+def is_header_footer(text: str) -> bool:
+    upper = text.upper()
+    return "UNDERGRADUATE BULLETIN" in upper or ("DUKE KUNSHAN UNIVERSITY" in upper and len(text.split()) <= 5)
+
+
+def is_course_code(text: str) -> bool:
+    return bool(re.match(r"^[A-Z]{2,10}\s*\d{1,4}[A-Z]?\b", text))
+
+
+def is_prerequisite(text: str) -> bool:
+    return text.lower().startswith(("prerequisite:", "prerequisites:", "prerequisite(s):", "corequisite:"))
+
+
+def is_table_fragment(text: str, fonts: set[str]) -> bool:
+    return (
+        "Palatino" in " ".join(fonts)
+        and not is_course_code(text)
+        and (bool(re.search(r"[$¥]\s*\d|\d{1,3}(?:,\d{3})", text)) or "(Kunshan)" in text)
+        and len(text) < 220
     )
 
 
-def is_course_code(line):
-    return bool(
-        re.match(
-            r"^[A-Z]{2,10}\s*\d{2,4}[A-Z]?\b",
-            line
-        )
-    )
-
-
-def is_prerequisite(line):
-    lower = line.lower()
-
-    prefixes = [
-        "prerequisite",
-        "prerequisites",
-        "prerequisite(s)",
-        "corequisite",
-        "corequisites",
-        "corequisite(s)"
-    ]
-
-    return any(
-        lower.startswith(prefix)
-        for prefix in prefixes
-    )
-
-
-def is_course_subject_heading(line):
-    return bool(
-        re.match(
-            r"^Courses?\s+with\s+Course\s+Subject",
-            line,
-            re.IGNORECASE
-        )
-    )
-
-
-def is_course_table_heading(line):
-    return bool(
-        re.match(
-            r"^Course\s+Code\s+Course\s+Name\s+Course",
-            line,
-            re.IGNORECASE
-        )
-    ) or line.lower() == "credit"
-
-
-def is_toc_line(line):
-    if re.search(r"\.{3,}\s*\d+\s*$", line):
-        return True
-
-    return False
-
-
-def is_page_number(line):
-    return bool(
-        re.fullmatch(
-            r"\d+",
-            line
-        )
-    )
-
-
-def is_header_footer(line):
-    upper = line.upper()
-
-    if "DUKE KUNSHAN UNIVERSITY" in upper:
-        return True
-
-    if "UNDERGRADUATE BULLETIN" in upper:
-        return True
-
-    return False
-
-
-def heading_score(line):
-    words = line.split()
-
-    if not words:
-        return 0
-
-    if len(words) > 10:
-        return 0
-
-    if line.endswith("."):
-        return 0
-
-    if line.endswith(","):
-        return 0
-
-    if line.endswith(";"):
-        return 0
-
-    if is_course_code(line):
-        return 0
-
-    if is_prerequisite(line):
-        return 0
-
-    if is_course_subject_heading(line):
-        return 0
-
-    if re.match(r"^[•\-]", line):
-        return 0
-
-    title_words = 0
-
-    for word in words:
-        cleaned = re.sub(
-            r"[^A-Za-z]",
-            "",
-            word
-        )
-
-        if cleaned and cleaned[0].isupper():
-            title_words += 1
-
-    return title_words / len(words)
-
-
-def is_section(line):
-    if heading_score(line) < 0.8:
-        return False
-
-    words = line.split()
-
-    if len(words) < 2:
-        return False
-
-    if ":" in line:
-        return False
-
-    return True
-
-
-def is_subsection(line):
-    if is_course_code(line):
-        return False
-
-    if is_prerequisite(line):
-        return False
-
-    if is_course_subject_heading(line):
-        return False
-
-    if re.match(r"^[•\-]", line):
-        return False
-
-    words = line.split()
-
-    if len(words) < 2:
-        return False
-
-    if len(words) > 12:
-        return False
-
-    if line.endswith("."):
-        return False
-
-    if ":" not in line:
-        return False
-
-    return True
-
-
-with pdfplumber.open(pdf_path) as pdf:
-
-    for page_number, page in enumerate(
-        pdf.pages,
-        start=1
-    ):
-
-        text = page.extract_text()
-
-        if not text:
+def page_lines(page):
+    for line in page.extract_text_lines(return_chars=True):
+        text = clean_text(line["text"])
+        chars = line["chars"]
+        if not text or not chars or is_page_number(text) or is_header_footer(text):
             continue
+        yield text, max(char["size"] for char in chars), {char["fontname"] for char in chars}
 
-        lines = [
-            clean_line(line)
-            for line in text.split("\n")
-            if clean_line(line)
-        ]
 
-        cleaned_lines = []
+def extract_bulletin(pdf_path: str | Path) -> pd.DataFrame:
+    records = []
+    chapter = section = subsection = ""
+    buffer: list[str] = []
+    buffer_page = None
+    started = False
 
-        for line in lines:
+    def save():
+        nonlocal buffer, buffer_page
+        text = clean_text(" ".join(buffer))
+        if started and section and not text.startswith("--") and len(text.split()) >= 8:
+            records.append({"chapter": chapter, "section": section, "subsection": subsection, "page": buffer_page, "text": text})
+        buffer, buffer_page = [], None
 
-            if is_page_number(line):
+    with pdfplumber.open(pdf_path) as pdf:
+        for page_number, page in enumerate(pdf.pages, start=1):
+            if 3 <= page_number <= 9:
                 continue
-
-            if is_header_footer(line):
-                continue
-
-            cleaned_lines.append(line)
-
-        if not cleaned_lines:
-            continue
-
-        toc_lines = sum(
-            is_toc_line(line)
-            for line in cleaned_lines
-        )
-
-        if toc_lines >= 3:
-            continue
-
-        current_text = []
-
-        def save_passage():
-
-            if not current_text:
-                return
-
-            if not content_started:
-                current_text.clear()
-                return
-
-            passage = " ".join(
-                current_text
-            )
-
-            passage = re.sub(
-                r"\s+",
-                " ",
-                passage
-            ).strip()
-
-            if len(passage.split()) < 8:
-                current_text.clear()
-                return
-
-            records.append({
-                "chapter": current_chapter,
-                "section": current_section,
-                "subsection": current_subsection,
-                "page": page_number,
-                "text": passage
-            })
-
-            current_text.clear()
-
-        for line in cleaned_lines:
-
-            if is_toc_line(line):
-                continue
-
-            if is_chapter(line):
-
-                save_passage()
-
-                current_chapter = line
-                current_section = re.sub(r"^Part\s+\d+\s*:\s*", "", line)
-                current_subsection = ""
-                content_started = True
-                course_catalog_mode = False
-                in_course_table = False
-
-                continue
-
-            if not content_started:
-                continue
-
-            if is_course_subject_heading(line):
-
-                save_passage()
-
-                current_section = "Course Descriptions"
-                current_subsection = line
-                course_catalog_mode = True
-                in_course_table = False
-
-                continue
-
-            if is_course_table_heading(line):
-
-                save_passage()
-                in_course_table = True
-
-                continue
-
-            if in_course_table:
-
-                if is_section(line):
-                    save_passage()
-                    current_section = line
-                    current_subsection = ""
-                    in_course_table = False
-
-                continue
-
-            if course_catalog_mode:
-
-                if is_course_code(line):
-                    save_passage()
-                    current_text.append(line)
+            for text, size, fonts in page_lines(page):
+                bold = any("Bold" in font for font in fonts)
+                if re.match(r"^Part\s+\d+\s*:", text) and size >= 15:
+                    save()
+                    chapter, section, subsection = text, re.sub(r"^Part\s+\d+\s*:\s*", "", text), ""
+                    started = True
                     continue
+                if not started:
+                    continue
+                if bold and size >= 13:
+                    save()
+                    section, subsection = text, ""
+                    continue
+                if section == "Course Descriptions" and is_course_code(text):
+                    save()
+                    buffer, buffer_page = [text], page_number
+                    continue
+                if bold and 11.5 <= size < 13 and not is_prerequisite(text) and not is_table_fragment(text, fonts):
+                    save()
+                    subsection = text
+                    continue
+                if is_table_fragment(text, fonts):
+                    continue
+                if buffer_page is None:
+                    buffer_page = page_number
+                buffer.append(text)
+                if text.endswith((".", "?", "!")):
+                    save()
+            save()
 
-                current_text.append(line)
-
-                continue
-
-            if is_course_code(line):
-
-                save_passage()
-
-                continue
-
-            if is_section(line):
-
-                save_passage()
-
-                current_section = line
-                current_subsection = ""
-
-                continue
-
-            if is_subsection(line):
-
-                save_passage()
-
-                current_subsection = line
-
-                continue
-
-            current_text.append(line)
-
-            if (
-                line.endswith(".")
-                or line.endswith("?")
-                or line.endswith("!")
-            ):
-                save_passage()
-
-        save_passage()
+    df = pd.DataFrame(records)
+    if df.empty:
+        return pd.DataFrame(columns=["passage_id", "chapter", "section", "subsection", "page", "text", "text_clean", "word_count"])
+    df["text_clean"] = df["text"].map(clean_text)
+    df["word_count"] = df["text_clean"].str.split().str.len()
+    df = df.drop_duplicates(subset=["text_clean"])
+    df = df[df["word_count"] >= 8].reset_index(drop=True)
+    df.insert(0, "passage_id", [f"p{i:04d}" for i in range(1, len(df) + 1)])
+    return df[["passage_id", "chapter", "section", "subsection", "page", "text", "text_clean", "word_count"]]
 
 
-df = pd.DataFrame(records)
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--pdf", default="data/lab8_bulletin.pdf")
+    parser.add_argument("--output", default="data/bulletin_passages.csv")
+    args = parser.parse_args()
+    df = extract_bulletin(args.pdf)
+    df.to_csv(args.output, index=False)
+    print(f"Raw/cleaned passages: {len(df)}")
+    print(f"Average passage length: {df.word_count.mean():.2f}")
+    print(f"Formal sections: {df.section.nunique()}")
 
-raw_count = len(df)
 
-df = df.dropna(
-    subset=["text"]
-)
-
-df["text"] = (
-    df["text"]
-    .str.replace(
-        r"\s+",
-        " ",
-        regex=True
-    )
-    .str.strip()
-)
-
-df = df.drop_duplicates(
-    subset=["text"]
-)
-
-df["text_clean"] = (
-    df["text"]
-    .str.replace(
-        r"\s+",
-        " ",
-        regex=True
-    )
-    .str.strip()
-)
-
-df["word_count"] = (
-    df["text_clean"]
-    .str.split()
-    .str.len()
-)
-
-df = df[
-    df["word_count"] >= 8
-].copy()
-
-df = df[
-    ~df["text_clean"].str.startswith("--")
-    & ~df["text_clean"].str.contains(
-        "creative world who contribute",
-        case=False,
-        na=False
-    )
-].copy()
-
-df = df.reset_index(
-    drop=True
-)
-
-df["passage_id"] = [
-    f"p{i:04d}"
-    for i in range(
-        1,
-        len(df) + 1
-    )
-]
-
-df = df[
-    [
-        "passage_id",
-        "chapter",
-        "section",
-        "subsection",
-        "page",
-        "text",
-        "text_clean",
-        "word_count"
-    ]
-]
-
-df.to_csv(
-    output_path,
-    index=False
-)
-
-print(
-    "Raw passages:",
-    raw_count
-)
-
-print(
-    "Cleaned passages:",
-    len(df)
-)
-
-print(
-    "Average passage length:",
-    df["word_count"].mean()
-)
-
-print(
-    "Number of chapters:",
-    df["chapter"].nunique()
-)
-
-print(
-    "Number of sections:",
-    df["section"].nunique()
-)
-
-print(
-    "Number of subsections:",
-    df["subsection"].nunique()
-)
-
-print("\nChapters:")
-
-print(
-    df["chapter"]
-    .drop_duplicates()
-    .to_string(index=False)
-)
-
-print("\nTop sections:")
-
-print(
-    df["section"]
-    .value_counts()
-    .head(20)
-    .to_string()
-)
-
-print("\nFirst 20 passages:")
-
-print(
-    df[
-        [
-            "passage_id",
-            "chapter",
-            "section",
-            "subsection",
-            "page",
-            "word_count"
-        ]
-    ]
-    .head(20)
-    .to_string(index=False)
-)
+if __name__ == "__main__":
+    main()

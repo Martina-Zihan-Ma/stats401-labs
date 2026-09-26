@@ -40,7 +40,7 @@ average_length_by_section = (
 passages_by_section.to_csv("data/passages_by_section.csv", index=False)
 average_length_by_section.to_csv("data/average_length_by_section.csv", index=False)
 
-model = SentenceTransformer("all-MiniLM-L6-v2")
+model = SentenceTransformer("all-MiniLM-L6-v2", local_files_only=True)
 embeddings = model.encode(df["text_clean"].tolist(), normalize_embeddings=True)
 
 reducer = umap.UMAP(

@@ -1,10 +1,38 @@
 from pathlib import Path
+import tempfile
 import unittest
 
 import pandas as pd
+from lab8.bulletin_process import extract_bulletin
 
 
 class SemanticOutputTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.extracted_corpus = extract_bulletin("data/lab8_bulletin.pdf")
+
+    def test_extractor_assigns_known_false_headings_to_real_sections(self):
+        corpus = self.extracted_corpus
+        forbidden = {
+            "(Kunshan) (Kunshan)",
+            "Joint Entrance Exam (JEE); or",
+            "Credit (CR/NC) Grading System.)",
+            "\uf0a7 Intl-admissions@dukekunshan.edu.cn (Duke Kunshan International Admissions)",
+            "Undergraduate Degree.)",
+        }
+        self.assertFalse(corpus["section"].isin(forbidden).any())
+        self.assertTrue(((corpus["chapter"] == "Part 4: Admission, Scholarships and Financial Aid") & (corpus["section"] == "Application Requirements")).any())
+        self.assertTrue(((corpus["chapter"] == "Part 5: Financial Information") & (corpus["section"] == "Estimated Expenses")).any())
+        self.assertTrue(((corpus["chapter"] == "Part 6: Academic Procedures and Information") & (corpus["section"] == "Grading and Grade Requirements") & (corpus["subsection"].str.contains("Credit/No Credit", na=False))).any())
+
+    def test_extractor_keeps_course_descriptions_as_a_formal_section(self):
+        corpus = self.extracted_corpus
+        courses = corpus[corpus["section"] == "Course Descriptions"]
+        self.assertGreater(len(courses), 650)
+        named_subsections = courses["subsection"].fillna("").str.strip()
+        named_subsections = named_subsections[named_subsections.ne("")]
+        self.assertTrue(named_subsections.str.startswith("Courses with Course Subject:").all())
+        self.assertFalse(courses["text"].str.fullmatch(r"Course Code Course Name Course Credit", na=False).any())
     def test_corpus_excludes_course_table_fragments_and_false_sections(self):
         corpus = pd.read_csv("data/bulletin_passages.csv")
         false_sections = {

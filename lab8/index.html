@@ -25,10 +25,10 @@
         <h2>Bulletin and Corpus Description</h2>
         <p>The corpus uses the Duke Kunshan University Undergraduate Bulletin, 2021–22 edition. The PDF was provided with this lab as <code>data/lab8_bulletin.pdf</code> and accessed on September 26, 2026. It was divided into short paragraphs or policy blocks while preserving chapter, section, subsection, page, and passage text.</p>
         <div class="summary-grid">
-            <div><strong>Raw passages</strong><span>1,281</span></div>
-            <div><strong>After cleaning</strong><span>1,265</span></div>
-            <div><strong>Average length</strong><span>73.26 words</span></div>
-            <div><strong>Formal sections</strong><span>117</span></div>
+            <div><strong>Raw passages</strong><span>1,616</span></div>
+            <div><strong>After cleaning</strong><span>1,616</span></div>
+            <div><strong>Average length</strong><span>68.71 words</span></div>
+            <div><strong>Formal sections</strong><span>82</span></div>
         </div>
     </section>
 
@@ -65,16 +65,16 @@
     <section>
         <h2>Semantic Findings</h2>
         <ol>
-            <li>The largest semantic topics are Politics, Culture and Public Policy (279 passages), Quantitative, Data and Computing (210), and Academic Credits and Graduation (180).</li>
+            <li>The largest semantic topics are China, Language and Global Education (319 passages), Arts, Media and Digital Practice (228), and Politics, Culture and Public Policy (225).</li>
             <li>All eight topics appear across multiple formal sections, showing that the bulletin’s formal hierarchy and its semantic organization are not identical.</li>
-            <li>Course Descriptions contains six topics, while Student Research Opportunities contains four, making them the most semantically diverse formal sections.</li>
-            <li>A substring search for <em>credit</em> returns 776 passages across seven semantic topics, whereas <em>graduation</em> appears in four topics and <em>registration</em> in three.</li>
+            <li>Course Descriptions contains all eight topics; the major overview contains seven, while Career Services and Degree Requirements contain five each.</li>
+            <li>A substring search for <em>credit</em> returns 895 passages across all eight topics, whereas <em>graduation</em> appears in three topics and <em>registration</em> in three.</li>
         </ol>
     </section>
 
     <section>
         <h2>Design Description</h2>
-        <p>Each cleaned paragraph or short policy block was treated as one document. The corpus contains 1,265 passages after duplicate removal and removal of course-table fragments, with chapter, section, subsection, page, and text retained for every record. I generated normalized 384-dimensional semantic embeddings with the all-MiniLM-L6-v2 SentenceTransformer model. UMAP projected these vectors to two dimensions using cosine distance, 15 neighbors, a minimum distance of 0.15, and random state 401. The x and y positions are therefore used only as an approximate semantic neighborhood, not as independent variables. I applied KMeans with eight clusters to the original embedding vectors, inspected representative passages and TF-IDF terms, and named the resulting topics. The semantic map uses position for the projection, color for topic, and radius for passage length. Search and the two filters reduce visual prominence for nonmatching passages, while click opens the original structural metadata and five nearest passages calculated by cosine distance in the original embedding space. Zoom and pan allow local inspection. The matrix summarizes the relation between formal sections and semantic topics with passage counts; its tooltip exposes the exact section, topic, and count. It displays zero-count combinations in the lightest color. Clicking a matrix cell highlights the corresponding passages in the map, and clicking a map point highlights its matrix cell. Together, the two views connect where a passage occurs in the bulletin with what it discusses.</p>
+        <p>Each cleaned paragraph or short policy block was treated as one document. I used the bulletin’s bold 16-, 14-, and 12-point PDF hierarchy for chapter, section, and subsection detection rather than title-case guesses; this prevents table labels, list continuations, and contact addresses from becoming sections. The corpus contains 1,616 passages after deduplication and malformed-signature removal, with chapter, section, subsection, page, and text retained. I generated normalized 384-dimensional embeddings with all-MiniLM-L6-v2. UMAP projected them to two dimensions with cosine distance, 15 neighbors, minimum distance .15, and random state 401, so axes are only an approximate neighborhood. I applied eight-cluster KMeans to the original embeddings, inspected representative passages and TF-IDF terms, and named the topics. Position encodes the projection, color topic, and radius passage length. Search and filters dim nonmatches; clicking exposes structural metadata and five cosine-nearest passages. Zoom and pan support close inspection. The matrix gives section-by-topic counts, including zeroes in the lightest color, and its tooltip gives the exact cell values. Matrix-cell clicks highlight matching map points, and map-point clicks highlight their matrix cell, linking bulletin location with semantic content.</p>
     </section>
 
     <a href="../index.html" class="back-home">Back to home</a>
