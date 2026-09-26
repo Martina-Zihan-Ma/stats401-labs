@@ -3,19 +3,17 @@ body {
     max-width: 1000px;
     margin: 40px auto;
     padding: 0 20px;
-    color: #18353B;
-    background: #F7FBFA;
 }
 
 
 .bar:hover {
-    fill: #E76F51;
+    fill: orange;
 }
 
 .bar-value {
     font-size: 12px;
     font-weight: bold;
-    fill: #315A63;
+    fill: #333;
 }
 
 .score-label {
@@ -144,8 +142,8 @@ h2 {
 #semantic-map svg, #section-chart svg, #length-chart svg {
     width: 100%;
     height: auto;
-    border: 1px solid #C9DEDA;
-    background: #FFFFFF;
+    border: 1px solid #ddd;
+    background: white;
 }
 
 .passage {
@@ -195,8 +193,8 @@ h2 {
 
 #matrix {
     overflow: auto;
-    border: 1px solid #C9DEDA;
-    background: #FFFFFF;
+    border: 1px solid #ddd;
+    background: white;
 }
 
 .matrix-cell {
@@ -213,10 +211,10 @@ h2 {
 }
 
 .topic-label {
-    fill: #214C55;
+    fill: #333;
     font-weight: bold;
 }
 
 .section-label {
-    fill: #40636A;
+    fill: #666;
 }
