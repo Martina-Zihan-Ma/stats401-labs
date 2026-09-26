@@ -1,0 +1,222 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+    color: #18353B;
+    background: #F7FBFA;
+}
+
+
+.bar:hover {
+    fill: #E76F51;
+}
+
+.bar-value {
+    font-size: 12px;
+    font-weight: bold;
+    fill: #315A63;
+}
+
+.score-label {
+    font-size: 17px;
+    font-weight: bold;
+    fill: #333;
+}
+
+.name-label {
+    font-size: 15px;
+    fill: #666;
+}
+
+.back-home {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 8px 14px;
+
+    text-decoration: none;
+    color: #333;
+    background: #f1f1f1;
+
+    border-radius: 5px;
+}
+
+.back-home:hover {
+    background: #333;
+    color: white;
+}
+
+#svg-chart1 svg {
+    display: block;
+    margin: 0 auto;
+}
+
+.lab-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 30px 0;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.lab-nav a {
+    padding: 8px 14px;
+    text-decoration: none;
+    background: #f1f1f1;
+    color: #333;
+    border-radius: 5px;
+}
+
+.lab-nav a:hover {
+    background: #333;
+    color: white;
+}
+
+.lab-nav .active {
+    padding: 8px 14px;
+    border-radius: 5px;
+    background: #333;
+    color: white;
+}
+
+.tooltip {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    background: white;
+    border: 1px solid #aaa;
+    padding: 8px 10px;
+    border-radius: 4px;
+}
+
+section {
+    margin: 34px 0;
+}
+
+h2 {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+}
+
+.summary-grid, .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 14px;
+}
+
+.overview-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+.summary-grid div, #detail-panel {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 14px;
+    background: #fafafa;
+}
+
+.summary-grid span {
+    display: block;
+    font-size: 24px;
+    margin-top: 8px;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 16px 0;
+}
+
+.controls input, .controls select, .controls button {
+    padding: 8px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    background: white;
+}
+
+.controls input {
+    flex: 1 1 240px;
+}
+
+#semantic-map svg, #section-chart svg, #length-chart svg {
+    width: 100%;
+    height: auto;
+    border: 1px solid #C9DEDA;
+    background: #FFFFFF;
+}
+
+.passage {
+    stroke: #333;
+    stroke-width: .35px;
+    cursor: pointer;
+}
+
+.passage.selected {
+    stroke: #000;
+    stroke-width: 3px;
+}
+
+.passage.neighbor {
+    stroke: #000;
+    stroke-width: 1.5px;
+}
+
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    margin: 12px 0;
+}
+
+.matrix-legend {
+    margin: 10px 0;
+    font-size: 13px;
+    color: #555;
+}
+
+.legend span {
+    font-size: 13px;
+}
+
+.legend i {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    margin-right: 5px;
+    border-radius: 50%;
+}
+
+#detail-panel {
+    line-height: 1.5;
+}
+
+#matrix {
+    overflow: auto;
+    border: 1px solid #C9DEDA;
+    background: #FFFFFF;
+}
+
+.matrix-cell {
+    cursor: pointer;
+}
+
+.active-cell {
+    stroke: #111;
+    stroke-width: 2px;
+}
+
+.topic-label, .section-label {
+    font-size: 11px;
+}
+
+.topic-label {
+    fill: #214C55;
+    font-weight: bold;
+}
+
+.section-label {
+    fill: #40636A;
+}
