@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualization Critique and Redesign</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <nav class="lab-nav" aria-label="Course labs">
+        <a href="../lab1/index.html">Lab 1</a>
+        <a href="../lab2/index.html">Lab 2</a>
+        <a href="../lab3/index.html">Lab 3</a>
+        <a href="../lab4/index.html">Lab 4</a>
+        <a href="../lab5/index.html">Lab 5</a>
+        <a href="../lab6/index.html">Lab 6</a>
+        <a href="../lab7/index.html">Lab 7</a>
+        <a href="../lab8/index.html">Lab 8</a>
+        <a href="../lab9/index.html">Lab 9</a>
+        <a href="../lab10/index.html">Lab 10</a>
+        <span class="active">Visualization Critique and Redesign</span>
+    </nav>
+
+    <main>
+        <header class="page-header">
+            <p class="eyebrow">DKU Class of 2025</p>
+            <h1>Further Study Destinations</h1>
+            <p class="lede">Duke Kunshan University, Class of 2025</p>
+        </header>
+
+        <section class="original-context" aria-labelledby="original-heading">
+            <h2 id="original-heading">About the original visualization</h2>
+            <p>The original report presents destination shares, selected schools, and reported programs for the Class of 2025. It separates Chinese students and international students.</p>
+            <p><strong>Source:</strong> <a href="https://careerservices.dukekunshan.edu.cn/zh-hans/%E9%9B%87%E4%B8%BB%E5%90%88%E4%BD%9C-%E6%AF%95%E4%B8%9A%E7%94%9F%E5%8D%87%E5%AD%A6%E5%B0%B1%E4%B8%9A%E8%B4%A8%E9%87%8F%E6%8A%A5%E5%91%8A/" target="_blank" rel="noopener noreferrer">Duke Kunshan University Office of Career Services, Undergraduate Graduate Outcomes Report</a>.</p>
+            <p>On this page, destination percentages and the partial school list are shown separately because they use different scopes.</p>
+        </section>
+
+        <section class="control-section" aria-labelledby="group-heading">
+            <div>
+                <h2 id="group-heading">Choose a student group</h2>
+                <p>Every view updates together.</p>
+            </div>
+            <div id="group-toggle" class="control-buttons" role="group" aria-label="Student group"></div>
+        </section>
+
+        <p id="app-status" class="app-status" role="status" aria-live="polite">Loading the supplied CSV files…</p>
+
+        <section class="chart-section" aria-labelledby="region-heading">
+            <div class="section-heading">
+                <p class="section-kicker">1. Overall destination shares</p>
+                <h2 id="region-heading">Where students who continued their studies went</h2>
+                <p id="denominator-note">Percentages use students in this group who chose further study as the denominator.</p>
+            </div>
+            <div id="region-chart" class="chart-area" aria-label="Destination share chart"></div>
+        </section>
+
+        <section class="chart-section destinations-section" aria-labelledby="destinations-heading">
+            <div class="section-heading">
+                <p class="section-kicker">2. Partial school list</p>
+                <h2 id="destinations-heading">Explore the reported school destinations</h2>
+                <p>Filter by the report's original region grouping. The map locates countries or areas; the ranking makes school and program information immediately visible.</p>
+            </div>
+            <div id="region-filter" class="filter-row" role="group" aria-label="Reported region"></div>
+            <div class="destination-grid">
+                <section class="map-panel" aria-labelledby="map-heading">
+                    <h3 id="map-heading">Location guide</h3>
+                    <p>Bubble size shows listed students. Click a bubble to narrow the school ranking.</p>
+                    <div id="world-map" class="chart-area" aria-label="World map of listed school locations"></div>
+                    <div id="location-detail" class="location-detail" aria-live="polite"></div>
+                </section>
+
+                <section id="school-directory" class="school-panel" aria-labelledby="school-heading">
+                    <h3 id="school-heading">Schools in the partial list</h3>
+                    <p>Sorted by the number of listed students. A school is selected automatically.</p>
+                    <div id="school-chart" class="chart-area" aria-label="School ranking chart"></div>
+                </section>
+            </div>
+
+            <section id="school-detail" class="school-detail" aria-live="polite"></section>
+        </section>
+    </main>
+
+    <footer>
+        <p>Data: locally supplied 2025 CSV extracts from the <a href="https://careerservices.dukekunshan.edu.cn/zh-hans/%E9%9B%87%E4%B8%BB%E5%90%88%E4%BD%9C-%E6%AF%95%E4%B8%9A%E7%94%9F%E5%8D%87%E5%AD%A6%E5%B0%B1%E4%B8%9A%E8%B4%A8%E9%87%8F%E6%8A%A5%E5%91%8A/" target="_blank" rel="noopener noreferrer">Duke Kunshan University Undergraduate Graduate Outcomes Report</a>.</p>
+        <a href="../index.html" class="back-home">Back to home</a>
+    </footer>
+
+    <div id="tooltip" class="tooltip" role="tooltip" aria-hidden="true"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
