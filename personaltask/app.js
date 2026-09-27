@@ -82,6 +82,13 @@ const locationCentroids = {
     "中国内地": [104, 35], "中国香港": [114.17, 22.3], "新加坡": [103.8, 1.35], "美国": [-98, 39], "加拿大": [-106, 57], "英国": [-2, 54], "德国": [10.4, 51.1], "澳大利亚": [134, -25], "沙特阿拉伯": [45, 24], "法国": [2, 47], "荷兰": [5.3, 52], "瑞士": [8.2, 46.8], "奥地利": [14.5, 47.5], "爱尔兰": [-8, 53]
 };
 
+const achievementMetrics = [
+    { qualifier: "About", value: "80%", label: "received an offer from a U.S. top-10 university, an Ivy League institution, Oxford, or Cambridge." },
+    { qualifier: "About", value: "4", label: "offers received per Chinese student who chose further study." },
+    { qualifier: "More than", value: "80%", label: "of Chinese undergraduate graduates went on to a world top-50 institution." },
+    { qualifier: "Doctoral study", value: "24 · 47 · 21", label: "Chinese graduates, doctoral-program offers, and students who ultimately enrolled in doctoral study, which is more than 10% of Chinese students who continued their studies." }
+];
+
 const state = { activeGroup: "chinese", selectedRegion: null, selectedLocation: null, selectedSchool: null, regions: [], schools: [], world: null };
 const status = d3.select("#app-status");
 
@@ -110,6 +117,16 @@ function renderToggle() {
     buttons.join("button").attr("type", "button").attr("aria-pressed", ([key]) => key === state.activeGroup).text(([, label]) => label).on("click", (_, [key]) => setActiveGroup(key));
 }
 
+function renderAchievementChart() {
+    const section = d3.select(".achievement-section").attr("hidden", state.activeGroup !== "chinese" ? "" : null);
+    if (state.activeGroup !== "chinese") return;
+    const metrics = section.select("#achievement-chart").selectAll("article").data(achievementMetrics, (metric) => metric.value + metric.qualifier).join("article").attr("class", "achievement-metric");
+    metrics.selectAll("*").remove();
+    metrics.append("p").attr("class", "achievement-qualifier").text((metric) => metric.qualifier);
+    metrics.append("p").attr("class", "achievement-metric-value").text((metric) => metric.value);
+    metrics.append("p").attr("class", "achievement-metric-label").text((metric) => metric.label);
+}
+
 function renderRegionFilter() {
     const regions = [...new Map(state.schools.filter((school) => school.groupKey === state.activeGroup).map((school) => [school.region_as_report, school.displayRegion])).entries()].map(([rawRegion, displayRegion]) => ({ rawRegion, displayRegion }));
     const choices = [{ rawRegion: null, displayRegion: "All reported regions" }, ...regions];
@@ -123,6 +140,7 @@ function setActiveGroup(groupKey) {
     state.selectedLocation = null;
     state.selectedSchool = null;
     renderToggle();
+    renderAchievementChart();
     renderRegionFilter();
     renderRegionChart();
     selectDefaultSchool();
@@ -278,6 +296,7 @@ async function initialize() {
         await loadData();
         renderToggle();
         renderRegionFilter();
+        renderAchievementChart();
         renderRegionChart();
         selectDefaultSchool();
         renderMap();

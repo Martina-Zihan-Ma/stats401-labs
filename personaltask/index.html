@@ -31,10 +31,69 @@
         </header>
 
         <section class="original-context" aria-labelledby="original-heading">
-            <h2 id="original-heading">About the original visualization</h2>
-            <p>The original report presents destination shares, selected schools, and reported programs for the Class of 2025. It separates Chinese students and international students.</p>
+            <h2 id="original-heading">Original Visualization</h2>
+            <p>The original report presents destination shares, selected schools, and reported programs for the Class of 2025.</p>
             <p><strong>Source:</strong> <a href="https://careerservices.dukekunshan.edu.cn/zh-hans/%E9%9B%87%E4%B8%BB%E5%90%88%E4%BD%9C-%E6%AF%95%E4%B8%9A%E7%94%9F%E5%8D%87%E5%AD%A6%E5%B0%B1%E4%B8%9A%E8%B4%A8%E9%87%8F%E6%8A%A5%E5%91%8A/" target="_blank" rel="noopener noreferrer">Duke Kunshan University Office of Career Services, Undergraduate Graduate Outcomes Report</a>.</p>
-            <p>On this page, destination percentages and the partial school list are shown separately because they use different scopes.</p>
+            <div class="original-visual-grid">
+                <figure class="original-figure">
+                    <div class="original-image-frame">
+                        <img src="images/original-visualization.jpg" alt="Original DKU Class of 2025 graduate outcomes visualization with cards, outcome statistics, and school destinations" loading="lazy">
+                    </div>
+                    <figcaption>Destination shares and highlighted outcomes from the original report.</figcaption>
+                </figure>
+                <figure class="original-figure original-list-figure">
+                    <div class="original-image-frame">
+                        <img src="images/original-phd-offers.jpg" alt="Original DKU report card listing Chinese graduates with doctoral-program offers and reported programs" loading="lazy">
+                    </div>
+                    <figcaption>A separate card lists doctoral-program offers and reported programs.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="narrative-section" aria-labelledby="audience-heading">
+            <h2 id="audience-heading">Audience &amp; Tasks</h2>
+            <div class="narrative-grid">
+                <article class="narrative-card">
+                    <h3>Audience</h3>
+                    <p>Parents of prospective students and students considering Duke Kunshan University may use graduate outcomes as an indicator of academic strength and future opportunities.</p>
+                </article>
+                <article class="narrative-card">
+                    <h3>Tasks</h3>
+                    <p>The report communicates and supports recruitment: it highlights graduate outcomes, shows postgraduate destinations, and presents DKU as an attractive option for prospective students and families.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="narrative-section" aria-labelledby="critique-heading">
+            <h2 id="critique-heading">Critique</h2>
+            <div class="narrative-grid">
+                <article class="narrative-card">
+                    <h3>Strengths</h3>
+                    <ul>
+                        <li><strong>Clear outcome emphasis.</strong> Large numbers make major achievements immediately visible.</li>
+                        <li><strong>Concrete evidence.</strong> Selected schools and programs make outcomes feel specific rather than abstract.</li>
+                        <li><strong>Recognizable structure.</strong> Card-based sections separate broad outcome topics at a glance.</li>
+                    </ul>
+                </article>
+                <article class="narrative-card">
+                    <h3>Weaknesses</h3>
+                    <ul>
+                        <li><strong>Visual overload.</strong> Cards, numbers, logos, and text compete for attention.</li>
+                        <li><strong>Limited comparison.</strong> Dense school lists make it difficult to compare destinations or spot patterns.</li>
+                        <li><strong>Little user control.</strong> The static format does not let viewers filter information for the group or destination they care about.</li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+
+        <section class="narrative-section redesign-strategy" aria-labelledby="strategy-heading">
+            <h2 id="strategy-heading">Redesign Strategy</h2>
+            <p>The redesign responds to those weaknesses through three coordinated changes.</p>
+            <ol class="strategy-list">
+                <li><strong>Interactive views.</strong> Group controls let viewers focus on one student population at a time, reducing visual overload and supporting purposeful exploration.</li>
+                <li><strong>Geographic exploration.</strong> The map shows how postgraduate destinations are distributed, making geographic patterns easier to recognize and destinations easier to browse.</li>
+                <li><strong>Outcome visibility.</strong> A dedicated evidence band keeps key reported achievements visible without combining incompatible measures in one chart.</li>
+            </ol>
         </section>
 
         <section class="control-section" aria-labelledby="group-heading">
@@ -46,6 +105,16 @@
         </section>
 
         <p id="app-status" class="app-status" role="status" aria-live="polite">Loading the supplied CSV files…</p>
+
+        <section class="chart-section achievement-section" aria-labelledby="achievement-heading">
+            <div class="section-heading">
+                <p class="section-kicker">Reported achievement context</p>
+                <h2 id="achievement-heading">Selected outcomes for Chinese students</h2>
+                <p>These original-report outcomes remain visible alongside the redesigned destination views.</p>
+            </div>
+            <div id="achievement-chart" class="achievement-chart" aria-label="Selected Chinese-student graduate outcomes reported by Duke Kunshan University"></div>
+            <p class="achievement-source-note">Values are reported by <a href="https://careerservices.dukekunshan.edu.cn/zh-hans/%E9%9B%87%E4%B8%BB%E5%90%88%E4%BD%9C-%E6%AF%95%E4%B8%9A%E7%94%9F%E5%8D%87%E5%AD%A6%E5%B0%B1%E4%B8%9A%E8%B4%A8%E9%87%8F%E6%8A%A5%E5%91%8A/" target="_blank" rel="noopener noreferrer">DKU's original report</a>; they are shown separately from the supplied CSV-based visualizations.</p>
+        </section>
 
         <section class="chart-section" aria-labelledby="region-heading">
             <div class="section-heading">

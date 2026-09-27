@@ -60,6 +60,29 @@ h3 { margin-bottom: 6px; font-size: 20px; letter-spacing: -.02em; }
 .original-context h2 { font-size: 20px; letter-spacing: 0; }
 .original-context p { max-width: 720px; margin-bottom: 8px; color: var(--muted); }
 .original-context p:last-child { margin-bottom: 0; }
+.original-context a { color: var(--accent-dark); font-weight: 700; }
+.original-visual-grid { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(280px, .8fr); gap: 22px; margin-top: 24px; align-items: start; }
+.original-figure { margin: 0; }
+.original-image-frame { max-height: 720px; overflow: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.original-image-frame img { display: block; width: 100%; height: auto; }
+.original-figure figcaption { margin-top: 9px; color: var(--muted); font-size: 14px; }
+
+.narrative-section { margin: 0 0 42px; padding-top: 6px; }
+.narrative-section > h2 { font-size: 24px; letter-spacing: -.02em; }
+.narrative-section > p { max-width: 720px; margin-bottom: 16px; color: var(--muted); }
+.narrative-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.narrative-card { padding: 20px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.narrative-card h3 { font-size: 19px; }
+.narrative-card p { margin-bottom: 0; color: var(--muted); }
+.narrative-card ul { margin: 0; padding-left: 19px; color: var(--muted); }
+.narrative-card li { margin-bottom: 10px; }
+.narrative-card li:last-child { margin-bottom: 0; }
+.narrative-card strong { color: var(--ink); }
+.redesign-strategy { margin-bottom: 58px; }
+.strategy-list { margin: 0; padding-left: 22px; color: var(--muted); }
+.strategy-list li { padding-left: 4px; margin-bottom: 10px; }
+.strategy-list li:last-child { margin-bottom: 0; }
+.strategy-list strong { color: var(--ink); }
 
 .control-section { display: flex; align-items: end; justify-content: space-between; gap: 24px; padding: 20px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .control-section h2 { margin-bottom: 3px; font-size: 18px; letter-spacing: 0; }
@@ -78,6 +101,15 @@ h3 { margin-bottom: 6px; font-size: 20px; letter-spacing: -.02em; }
 .section-heading { max-width: 780px; margin-bottom: 22px; }
 .chart-area { min-height: 120px; overflow: auto; }
 .chart-area svg { display: block; width: 100%; height: auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.achievement-section { margin-top: 52px; }
+.achievement-chart { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--accent-dark); border-radius: var(--radius); background: var(--accent-dark); overflow: hidden; }
+.achievement-metric { min-height: 218px; padding: 22px 20px; border-left: 1px solid rgba(255, 255, 255, .3); color: #ffffff; }
+.achievement-metric:first-child { border-left: 0; }
+.achievement-qualifier { margin-bottom: 3px; color: #c7e7dd; font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.achievement-metric-value { margin-bottom: 10px; color: #ffffff; font-size: clamp(36px, 4vw, 56px); font-weight: 700; letter-spacing: -.06em; line-height: .95; }
+.achievement-metric-label { margin: 0; color: #e6f2ee; font-size: 14px; line-height: 1.42; }
+.achievement-source-note { margin: 10px 0 0; color: var(--muted); font-size: 13px; }
+.achievement-source-note a { color: var(--accent-dark); font-weight: 700; }
 
 .limitation-note { margin: 0 0 22px; padding: 12px 14px; border-left: 4px solid #bd811e; background: var(--note-bg); color: var(--note-ink); font-size: 14px; }
 .destination-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 22px; align-items: start; }
@@ -123,6 +155,12 @@ footer a.back-home:hover, footer a.back-home:focus-visible { background: #333; c
     main { padding-top: 42px; }
     .control-section, footer { align-items: flex-start; flex-direction: column; }
     .control-buttons, .control-buttons button { width: 100%; }
+    .original-image-frame { max-height: 540px; }
+    .original-visual-grid { grid-template-columns: 1fr; }
+    .achievement-chart { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .achievement-metric:nth-child(odd) { border-left: 0; }
+    .achievement-metric:nth-child(n+3) { border-top: 1px solid rgba(255, 255, 255, .3); }
+    .narrative-grid { grid-template-columns: 1fr; }
     .destination-grid { grid-template-columns: 1fr; }
     .school-panel .chart-area { max-height: 520px; }
     .school-detail ul { columns: 1; }
