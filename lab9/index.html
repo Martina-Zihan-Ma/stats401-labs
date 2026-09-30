@@ -6,13 +6,18 @@
 
     <meta charset="UTF-8">
 
-    <title>Lab 9</title>
+    <title>Lab 9: Geospatial Visualization</title>
 
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
+    <header>
+        <h1>STATS 401</h1>
+        <p>Data Acquisition and Visualization</p>
+    </header>
+
     <nav class="lab-nav">
 
      <a href="../lab1/index.html">Lab 1</a>
@@ -30,16 +35,71 @@
     </nav>
 
 
-    <h1>Lab 9</h1>
+    <h1>Lab 9: 2025 GDP — Choropleth vs. Cartogram</h1>
 
-    <p>
-        Lab 9 will be added here.
-    </p>
+    <section>
+        <h2>Dataset Description</h2>
+        <p>This visualization uses the 50 largest economies by 2025 nominal GDP. GDP is measured in current-price U.S. dollars, in billions, and is joined to country boundaries with ISO-3 identifiers. Countries outside the supplied Top 50 file are shown as <strong>no data</strong>, rather than as zero GDP.</p>
+        <p class="source-note">Source: IMF World Economic Outlook, October 2025 nominal-GDP series. Values may include IMF staff estimates and can be revised.</p>
+    </section>
 
-    <a href="../index.html">
+    <section>
+        <h2>2025 GDP Choropleth</h2>
+        <p>Color encodes GDP while country shape and geographic position remain unchanged. A logarithmic color scale makes differences among the non-U.S. economies visible despite the strongly skewed distribution.</p>
+        <div class="map-actions">
+            <button id="reset-map" type="button">Reset map view</button>
+        </div>
+        <div id="choropleth" class="map-frame" aria-label="Interactive world choropleth of 2025 GDP"></div>
+        <div id="color-legend" class="legend"></div>
+    </section>
+
+    <section>
+        <h2>2025 GDP Cartogram</h2>
+        <p>This Dorling cartogram keeps countries near their geographic locations, but circle <strong>area</strong> represents GDP. Larger circles therefore indicate larger economies, not larger land area.</p>
+        <div id="cartogram" class="map-frame" aria-label="Interactive Dorling cartogram of 2025 GDP"></div>
+    </section>
+
+    <section>
+        <h2>Design and Comparison</h2>
+        <div class="analysis-question">
+            <h3>1. Which countries are most visually prominent in each map?</h3>
+            <p><strong>Answer:</strong> The United States and China are most prominent in both views. Germany, Japan, India, the United Kingdom, and France also stand out.</p>
+        </div>
+        <div class="analysis-question">
+            <h3>2. Which countries become much larger or smaller in the cartogram?</h3>
+            <p><strong>Answer:</strong> Japan, the United Kingdom, Italy, South Korea, the Netherlands, and Singapore become much more visible because their GDP is large relative to their land area.</p>
+        </div>
+        <div class="analysis-question">
+            <h3>3. What geographic information does the choropleth preserve?</h3>
+            <p><strong>Answer:</strong> It preserves country shape, coastlines, borders, adjacency, and geographic position, making regional patterns easy to recognize.</p>
+        </div>
+        <div class="analysis-question">
+            <h3>4. What geographic information does the cartogram distort?</h3>
+            <p><strong>Answer:</strong> It distorts original country shape, separation, and relative land area because circles are resized and moved to avoid overlap.</p>
+        </div>
+        <div class="analysis-question">
+            <h3>5. What tasks can the choropleth best support?</h3>
+            <p><strong>Answer:</strong> The choropleth is best for locating high-GDP economies, comparing broad regional patterns, and relating GDP to neighboring countries.</p>
+        </div>
+        <div class="analysis-question">
+            <h3>6. What tasks can the cartogram best support?</h3>
+            <p><strong>Answer:</strong> The cartogram is best for comparing economic magnitude, because a larger visual area immediately signals a larger GDP.</p>
+        </div>
+        <div class="analysis-question">
+            <h3>7. How does changing from color encoding to area encoding change your perception of global economic size?</h3>
+            <p><strong>Answer:</strong> Area emphasizes the concentration of global output: the United States and China occupy much more visual space, while smaller economies recede. Neither map is universally better; the choice depends on whether geographic context or quantitative comparison is more important.</p>
+        </div>
+    </section>
+
+    <div id="tooltip" class="tooltip" role="status" aria-live="polite"></div>
+
+    <a href="../index.html" class="back-home">
         Back to home
     </a>
 
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+    <script src="lab9.js"></script>
 </body>
 
 </html>

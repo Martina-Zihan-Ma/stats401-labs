@@ -1,0 +1,236 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+
+.bar:hover {
+    fill: orange;
+}
+
+.score-label {
+    font-size: 17px;
+    font-weight: bold;
+    fill: #333;
+}
+
+.name-label {
+    font-size: 15px;
+    fill: #666;
+}
+
+.back-home {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 8px 14px;
+
+    text-decoration: none;
+    color: #333;
+    background: #f1f1f1;
+
+    border-radius: 5px;
+}
+
+.back-home:hover {
+    background: #333;
+    color: white;
+}
+
+header p {
+    margin-top: -12px;
+    color: #666;
+}
+
+.lab-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 30px 0;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.lab-nav a {
+    padding: 8px 14px;
+    text-decoration: none;
+    background: #f1f1f1;
+    color: #333;
+    border-radius: 5px;
+}
+
+.lab-nav a:hover {
+    background: #333;
+    color: white;
+}
+
+.lab-nav .active {
+    padding: 8px 14px;
+    border-radius: 5px;
+    background: #333;
+    color: white;
+}
+
+.tooltip {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    background: white;
+    border: 1px solid #aaa;
+    padding: 8px 10px;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(35, 54, 67, .16);
+    font-size: 13px;
+    line-height: 1.45;
+    z-index: 10;
+}
+
+section {
+    margin: 34px 0;
+}
+
+h2 {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 9px;
+}
+
+p {
+    line-height: 1.6;
+}
+
+.source-note {
+    color: #666;
+    font-size: 14px;
+}
+
+.map-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin: 16px 0 10px;
+}
+
+button {
+    border: 1px solid #333;
+    border-radius: 5px;
+    background: #333;
+    color: white;
+    cursor: pointer;
+    font: inherit;
+    padding: 8px 12px;
+}
+
+button:hover,
+button:focus-visible {
+    background: #555;
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+.map-frame {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #f8fafb;
+}
+
+.map-frame svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.country {
+    stroke: white;
+    stroke-width: .45px;
+    cursor: default;
+    transition: opacity 120ms ease, stroke-width 120ms ease;
+}
+
+.country.has-data,
+.cartogram-country {
+    cursor: pointer;
+}
+
+.country.is-hovered,
+.country.is-selected,
+.cartogram-country.is-hovered,
+.cartogram-country.is-selected {
+    stroke: #161616;
+    stroke-width: 2.2px;
+}
+
+.country.is-selected,
+.cartogram-country.is-selected {
+    filter: brightness(.88);
+}
+
+.legend {
+    margin-top: 12px;
+}
+
+.legend svg {
+    display: block;
+    max-width: 100%;
+}
+
+.cartogram-country {
+    fill: #2a9d8f;
+    fill-opacity: .82;
+    stroke: white;
+    stroke-width: 1px;
+    transition: fill-opacity 120ms ease, stroke-width 120ms ease;
+}
+
+.cartogram-label {
+    fill: #18343a;
+    font-size: 10px;
+    font-weight: bold;
+    pointer-events: none;
+    text-anchor: middle;
+}
+
+.load-error {
+    margin: 0;
+    padding: 22px;
+    color: #8a2323;
+}
+
+.analysis-question {
+    border-top: 1px solid #e2e2e2;
+    padding: 14px 0 2px;
+}
+
+.analysis-question h3 {
+    font-size: 16px;
+    margin: 0;
+}
+
+.analysis-question p {
+    margin: 7px 0 10px;
+}
+
+@media (max-width: 650px) {
+    body {
+        margin: 24px auto;
+        padding: 0 14px;
+    }
+
+    .lab-nav {
+        margin: 20px 0;
+    }
+
+    .lab-nav a,
+    .lab-nav .active {
+        padding: 7px 10px;
+    }
+
+    .map-actions {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
