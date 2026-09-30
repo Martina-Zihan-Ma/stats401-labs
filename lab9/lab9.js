@@ -27,6 +27,10 @@ const ISO3_BY_NUMERIC_ID = new Map([
     [784, "ARE"], [792, "TUR"], [804, "UKR"], [818, "EGY"], [826, "GBR"], [840, "USA"],
     [158, "TWN"], [704, "VNM"], [32, "ARG"]
 ]);
+const SPECIAL_LOCATIONS = new Map([
+    ["SGP", [103.8198, 1.3521]],
+    ["HKG", [114.1694, 22.3193]]
+]);
 
 const width = 960;
 const mapHeight = 520;
@@ -48,14 +52,17 @@ Promise.all([
     });
 
     const countriesWithGDP = features.filter(feature => feature.properties.gdpRecord);
-    drawChoropleth(features, countriesWithGDP);
-    drawCartogram(countriesWithGDP);
+    const featureByIso3 = new Map(countriesWithGDP.map(feature => [feature.properties.iso3, feature]));
+    const recordsWithoutBoundaries = rows.filter(row => !featureByIso3.has(row.iso3));
+
+    drawChoropleth(features, rows, recordsWithoutBoundaries);
+    drawCartogram(rows, features, featureByIso3);
 }).catch(error => {
     d3.selectAll("#choropleth, #cartogram").html(`<p class="load-error">The maps could not be loaded. Please check your internet connection and reload the page.</p>`);
     console.error("Lab 9 data loading error:", error);
 });
 
-function drawChoropleth(features, countriesWithGDP) {
+function drawChoropleth(features, rows, recordsWithoutBoundaries) {
     const svg = d3.select("#choropleth").append("svg")
         .attr("viewBox", `0 0 ${width} ${mapHeight}`)
         .attr("role", "img")
@@ -63,7 +70,7 @@ function drawChoropleth(features, countriesWithGDP) {
     const mapGroup = svg.append("g");
     const projection = d3.geoNaturalEarth1().fitExtent([[18, 18], [width - 18, mapHeight - 18]], { type: "FeatureCollection", features });
     const path = d3.geoPath(projection);
-    const values = countriesWithGDP.map(feature => feature.properties.gdpRecord.gdp);
+    const values = rows.map(row => row.gdp);
     const color = d3.scaleSequentialLog(d3.interpolateYlGnBu).domain(d3.extent(values));
 
     const countries = mapGroup.selectAll("path")
@@ -95,10 +102,40 @@ function drawChoropleth(features, countriesWithGDP) {
             }
         });
 
+    const specialMarkers = mapGroup.selectAll("circle.special-country")
+        .data(recordsWithoutBoundaries.filter(row => SPECIAL_LOCATIONS.has(row.iso3)))
+        .join("circle")
+        .attr("class", "country has-data special-country")
+        .attr("cx", row => projection(SPECIAL_LOCATIONS.get(row.iso3))[0])
+        .attr("cy", row => projection(SPECIAL_LOCATIONS.get(row.iso3))[1])
+        .attr("r", 4)
+        .attr("fill", row => color(row.gdp))
+        .attr("tabindex", 0)
+        .attr("aria-label", row => `${row.country}: ${formatGDP(row.gdp)}`)
+        .on("mouseenter", (event, row) => {
+            hoveredId = row.iso3;
+            updateLinkedHighlight();
+            showTooltip(event, row);
+        })
+        .on("mousemove", event => moveTooltip(event))
+        .on("mouseleave", () => {
+            hoveredId = null;
+            updateLinkedHighlight();
+            hideTooltip();
+        })
+        .on("click", (event, row) => toggleSelected(row.iso3, row, event))
+        .on("keydown", (event, row) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                toggleSelected(row.iso3, row, event);
+            }
+        });
+
     const zoom = d3.zoom().scaleExtent([1, 7]).on("zoom", event => mapGroup.attr("transform", event.transform));
     svg.call(zoom);
     d3.select("#reset-map").on("click", () => svg.transition().duration(500).call(zoom.transform, d3.zoomIdentity));
     registerLinkedLayer(countries, "country");
+    registerLinkedLayer(specialMarkers, "special-country");
     drawLegend(color, d3.extent(values));
 }
 
@@ -118,17 +155,18 @@ function drawLegend(color, domain) {
     legend.append("text").attr("x", 187).attr("y", 13).attr("font-size", 10).text("No data");
 }
 
-function drawCartogram(countriesWithGDP) {
+function drawCartogram(rows, features, featureByIso3) {
     const svg = d3.select("#cartogram").append("svg")
         .attr("viewBox", `0 0 ${width} ${cartogramHeight}`)
         .attr("role", "img")
         .attr("aria-label", "Dorling cartogram where country circle area represents 2025 GDP");
-    const projection = d3.geoNaturalEarth1().fitExtent([[30, 40], [width - 30, cartogramHeight - 32]], { type: "FeatureCollection", features: countriesWithGDP });
+    const projection = d3.geoNaturalEarth1().fitExtent([[30, 40], [width - 30, cartogramHeight - 32]], { type: "FeatureCollection", features });
     const path = d3.geoPath(projection);
-    const radius = d3.scaleSqrt().domain(d3.extent(countriesWithGDP, feature => feature.properties.gdpRecord.gdp)).range([9, 72]);
-    const nodes = countriesWithGDP.map(feature => {
-        const [x, y] = path.centroid(feature);
-        return { ...feature.properties.gdpRecord, x, y, homeX: x, homeY: y, r: radius(feature.properties.gdpRecord.gdp) };
+    const radius = d3.scaleSqrt().domain([0, d3.max(rows, row => row.gdp)]).range([0, 72]);
+    const nodes = rows.map(row => {
+        const feature = featureByIso3.get(row.iso3);
+        const [x, y] = feature ? path.centroid(feature) : projection(SPECIAL_LOCATIONS.get(row.iso3));
+        return { ...row, x, y, homeX: x, homeY: y, r: radius(row.gdp) };
     });
 
     svg.append("text").attr("x", 20).attr("y", 25).attr("font-size", 13).attr("fill", "#555").text("Circle area represents 2025 GDP; positions are approximate.");
